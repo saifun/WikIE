@@ -63,7 +63,7 @@ def get_indices_to_tag(index, text):
 
 
 # text = '25.08.2020 is the birth date of Saifun'
-text = '2012 מאי נולדה ב 25 ב אוגוסט 1997 ל פנה"ס ו התחילה ללמוד ב טכניון ב כ״ט ב שנת ה׳תשע"ה'
+text = '2012 מאי נולדה ב 21 ב אפריל 1984 ל פנה"ס ו התחילה ללמוד ב טכניון ב כ״ט ב שנת ה׳תשע"ה'
 ner = ['O', 'B-PER', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'S-ORG', 'O', 'O', 'O', 'O', 'O']
 span_to_index = build_span_to_index_dict(text)
 print(span_to_index)
