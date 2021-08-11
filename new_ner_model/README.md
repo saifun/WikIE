@@ -1,0 +1,1 @@
+# Hebrew NER AlephBert model
