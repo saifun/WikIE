@@ -208,7 +208,7 @@ def str_interesting_words(words):
 text="""
 אלברט איינשטיין נולד בגרמניה וגר בשוויץ
 """
-text = 'סיפן נולדה ב25 באוגוסט 1997 לפני הספירה והתחילה ללמוד בטכניון בשנת 2015'
+text = 'מאי נולדה ב 21 ב אפריל 1984 ל פנה"ס ו התחילה ללמוד ב טכניון ב כ״ט ב שנת ה׳תשע"ה'
 tree = SemanticTree(text)
 tree.parse_text()
 print(tree)
@@ -235,7 +235,7 @@ ner_results = ['B-PER', 'E-PER', 'O', 'O', 'S-GPE', 'O^O', 'O', 'O', 'S-GPE']
 
 
 text="""
-אברהם נדל עבד בחברת אגד כנהג אוטובוס בישראל
+אברהם כהן עבד בחברת אגד כנהג אוטובוס בישראל
 """
 tree = SemanticTree(text)
 tree.parse_text()
