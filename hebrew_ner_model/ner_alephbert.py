@@ -1,5 +1,5 @@
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:57:25.810663Z","iopub.execute_input":"2021-07-19T11:57:25.810975Z","iopub.status.idle":"2021-07-19T11:57:27.543509Z","shell.execute_reply.started":"2021-07-19T11:57:25.81093Z","shell.execute_reply":"2021-07-19T11:57:27.542483Z"}}
-!git clone https: // github.com / OnlpLab / NEMO - Corpus.git
+!git clone https://github.com/OnlpLab/NEMO-Corpus.git
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:57:27.546097Z","iopub.execute_input":"2021-07-19T11:57:27.546493Z","iopub.status.idle":"2021-07-19T11:57:34.762317Z","shell.execute_reply.started":"2021-07-19T11:57:27.54645Z","shell.execute_reply":"2021-07-19T11:57:34.761288Z"}}
 !pip install transformers
@@ -14,7 +14,7 @@ model = AutoModelForSequenceClassification.from_pretrained("onlplab/alephbert-ba
 model.save_pretrained("./initial_pretrained")
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:58:06.377438Z","iopub.execute_input":"2021-07-19T11:58:06.377804Z","iopub.status.idle":"2021-07-19T11:58:07.084314Z","shell.execute_reply.started":"2021-07-19T11:58:06.377763Z","shell.execute_reply":"2021-07-19T11:58:07.083144Z"}}
-!ls - latr. / initial_pretrained
+!ls -latr ./initial_pretrained
 
 # %% [code]
 dataset = {
@@ -26,7 +26,7 @@ dataset = {
 }
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:58:10.426892Z","iopub.execute_input":"2021-07-19T11:58:10.427232Z","iopub.status.idle":"2021-07-19T11:58:11.247522Z","shell.execute_reply.started":"2021-07-19T11:58:10.4272Z","shell.execute_reply":"2021-07-19T11:58:11.246431Z"}}
-!cat NEMO - Corpus / data / spmrl / gold / token - multi_gold_train.bmes NEMO - Corpus / data / spmrl / gold / token - multi_gold_dev.bmes NEMO - Corpus / data / spmrl / gold / token - multi_gold_test.bmes | cut - d " " - f 2 | grep - v "^$" | sort | uniq > labels.txt
+!cat NEMO-Corpus/data/spmrl/gold/token-multi_gold_train.bmes NEMO-Corpus/data/spmrl/gold/token-multi_gold_dev.bmes NEMO-Corpus/data/spmrl/gold/token-multi_gold_test.bmes | cut -d " " -f 2 | grep -v "^$"| sort | uniq > labels.txt
 
 # %% [code]
 labels = []
@@ -156,9 +156,7 @@ test_dataset = HebrewNERDataset(test_encodings, test_labels)
 train_dataset.__getitem__(2)
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T14:46:13.726625Z","iopub.execute_input":"2021-07-17T14:46:13.726986Z","iopub.status.idle":"2021-07-17T14:46:19.678281Z","shell.execute_reply.started":"2021-07-17T14:46:13.726955Z","shell.execute_reply":"2021-07-17T14:46:19.677312Z"}}
-!pip
-install
-wandb
+!pip install wandb
 
 # %% [code]
 CUDA_LAUNCH_BLOCKING = 1
@@ -186,7 +184,7 @@ trainer.train()
 trainer.save_model("./alephbert_ner")
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:03:40.047085Z","iopub.execute_input":"2021-07-17T15:03:40.047423Z","iopub.status.idle":"2021-07-17T15:03:40.771479Z","shell.execute_reply.started":"2021-07-17T15:03:40.047393Z","shell.execute_reply":"2021-07-17T15:03:40.770532Z"}}
-!ls - latr. / alephbert_ner /
+!ls -latr ./alephbert_ner/
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:03:53.757575Z","iopub.execute_input":"2021-07-17T15:03:53.758064Z","iopub.status.idle":"2021-07-17T15:04:05.965373Z","shell.execute_reply.started":"2021-07-17T15:03:53.758029Z","shell.execute_reply":"2021-07-17T15:04:05.964418Z"}}
 raw_pred, _, _ = trainer.predict(test_dataset)
