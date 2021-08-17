@@ -176,11 +176,12 @@ trainer.save_model("./alephbert_ner")
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:03:53.757575Z","iopub.execute_input":"2021-07-17T15:03:53.758064Z","iopub.status.idle":"2021-07-17T15:04:05.965373Z","shell.execute_reply.started":"2021-07-17T15:03:53.758029Z","shell.execute_reply":"2021-07-17T15:04:05.964418Z"}}
 raw_pred, _, _ = trainer.predict(test_dataset)
 
+# %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:03:50.580511Z","iopub.execute_input":"2021-07-17T15:03:50.580899Z","iopub.status.idle":"2021-07-17T15:03:50.592569Z","shell.execute_reply.started":"2021-07-17T15:03:50.580865Z","shell.execute_reply":"2021-07-17T15:03:50.588848Z"}}
+import numpy as np
+
 # Preprocess raw predictions
 y_pred = np.argmax(raw_pred, axis=1)
 
-# %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:03:50.580511Z","iopub.execute_input":"2021-07-17T15:03:50.580899Z","iopub.status.idle":"2021-07-17T15:03:50.592569Z","shell.execute_reply.started":"2021-07-17T15:03:50.580865Z","shell.execute_reply":"2021-07-17T15:03:50.588848Z"}}
-import numpy as np
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T08:42:43.08002Z","iopub.execute_input":"2021-07-17T08:42:43.080355Z","iopub.status.idle":"2021-07-17T08:42:43.088822Z","shell.execute_reply.started":"2021-07-17T08:42:43.080322Z","shell.execute_reply":"2021-07-17T08:42:43.087491Z"}}
 y_pred
@@ -220,7 +221,8 @@ test_sent = tokenizer(test_sent, truncation=True, padding=True)
 test_sent = HebrewNERDataset(test_sent, [0, 0, 0, 0, 0, 0])
 test_sent_pred, _, _ = trainer.predict(test_sent)
 test_sent_pred = np.argmax(test_sent_pred, axis=1)
-label_encoder.inverse_transform(test_sent_pred)
+print(test_sent)
+print(label_encoder.inverse_transform(test_sent_pred))
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:11:18.215907Z","iopub.execute_input":"2021-07-17T15:11:18.216227Z","iopub.status.idle":"2021-07-17T15:11:18.686283Z","shell.execute_reply.started":"2021-07-17T15:11:18.216198Z","shell.execute_reply":"2021-07-17T15:11:18.685479Z"}}
 test_s = "אלברט איינשטיין נולד בגרמניה בחודש מרץ בשנת 1879 והיה למדען המפורסם שזכה בפרס נובל"
@@ -230,7 +232,8 @@ test_s_tokenized = tokenizer(test_s, truncation=True, padding=True)
 test_s_dataset = HebrewNERDataset(test_s_tokenized, [0 for i in range(len(test_s))])
 test_s_pred, _, _ = trainer.predict(test_s_dataset)
 test_s_pred = np.argmax(test_s_pred, axis=1)
-label_encoder.inverse_transform(test_s_pred)
+print(test_s)
+print(label_encoder.inverse_transform(test_s_pred))
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:04:26.41412Z","iopub.execute_input":"2021-07-17T15:04:26.414433Z","iopub.status.idle":"2021-07-17T15:04:26.885386Z","shell.execute_reply.started":"2021-07-17T15:04:26.414403Z","shell.execute_reply":"2021-07-17T15:04:26.884603Z"}}
 test_s = "אלברט איינשטיין זכה בפרס נובל"
@@ -239,7 +242,8 @@ test_s_tokenized = tokenizer(test_s, truncation=True, padding=True)
 test_s_dataset = HebrewNERDataset(test_s_tokenized, [0 for i in range(len(test_s))])
 test_s_pred, _, _ = trainer.predict(test_s_dataset)
 test_s_pred = np.argmax(test_s_pred, axis=1)
-label_encoder.inverse_transform(test_s_pred)
+print(test_s)
+print(label_encoder.inverse_transform(test_s_pred))
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:04:28.786615Z","iopub.execute_input":"2021-07-17T15:04:28.786958Z","iopub.status.idle":"2021-07-17T15:04:29.26459Z","shell.execute_reply.started":"2021-07-17T15:04:28.786929Z","shell.execute_reply":"2021-07-17T15:04:29.263733Z"}}
 test_s = 'אברהם נדל יסד את חברת אגד ועבד כנהג אוטובוס בישראל'
@@ -248,7 +252,8 @@ test_s_tokenized = tokenizer(test_s, truncation=True, padding=True)
 test_s_dataset = HebrewNERDataset(test_s_tokenized, [0 for i in range(len(test_s))])
 test_s_pred, _, _ = trainer.predict(test_s_dataset)
 test_s_pred = np.argmax(test_s_pred, axis=1)
-label_encoder.inverse_transform(test_s_pred)
+print(test_s)
+print(label_encoder.inverse_transform(test_s_pred))
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:09:27.314584Z","iopub.execute_input":"2021-07-17T15:09:27.314955Z","iopub.status.idle":"2021-07-17T15:09:27.821761Z","shell.execute_reply.started":"2021-07-17T15:09:27.314924Z","shell.execute_reply":"2021-07-17T15:09:27.82098Z"}}
 test_s = 'מיכאל אנדה היה סופר ילדים גרמני'
@@ -257,7 +262,8 @@ test_s_tokenized = tokenizer(test_s, truncation=True, padding=True)
 test_s_dataset = HebrewNERDataset(test_s_tokenized, [0 for i in range(len(test_s))])
 test_s_pred, _, _ = trainer.predict(test_s_dataset)
 test_s_pred = np.argmax(test_s_pred, axis=1)
-label_encoder.inverse_transform(test_s_pred)
+print(test_s)
+print(label_encoder.inverse_transform(test_s_pred))
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:04:33.310345Z","iopub.execute_input":"2021-07-17T15:04:33.310707Z","iopub.status.idle":"2021-07-17T15:04:33.789913Z","shell.execute_reply.started":"2021-07-17T15:04:33.310659Z","shell.execute_reply":"2021-07-17T15:04:33.789095Z"}}
 test_s = "אריאנה גרנדה היא זמרת חמודה"
@@ -266,7 +272,8 @@ test_s_tokenized = tokenizer(test_s, truncation=True, padding=True)
 test_s_dataset = HebrewNERDataset(test_s_tokenized, [0 for i in range(len(test_s))])
 test_s_pred, _, _ = trainer.predict(test_s_dataset)
 test_s_pred = np.argmax(test_s_pred, axis=1)
-label_encoder.inverse_transform(test_s_pred)
+print(test_s)
+print(label_encoder.inverse_transform(test_s_pred))
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:11:40.748109Z","iopub.execute_input":"2021-07-17T15:11:40.74864Z","iopub.status.idle":"2021-07-17T15:11:41.358964Z","shell.execute_reply.started":"2021-07-17T15:11:40.748582Z","shell.execute_reply":"2021-07-17T15:11:41.358126Z"}}
 test_s = "יוסי שטיינמץ הוא נגן קלרינט"
@@ -275,7 +282,8 @@ test_s_tokenized = tokenizer(test_s, truncation=True, padding=True)
 test_s_dataset = HebrewNERDataset(test_s_tokenized, [0 for i in range(len(test_s))])
 test_s_pred, _, _ = trainer.predict(test_s_dataset)
 test_s_pred = np.argmax(test_s_pred, axis=1)
-label_encoder.inverse_transform(test_s_pred)
+print(test_s)
+print(label_encoder.inverse_transform(test_s_pred))
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:12:12.244861Z","iopub.execute_input":"2021-07-17T15:12:12.24519Z","iopub.status.idle":"2021-07-17T15:12:12.71718Z","shell.execute_reply.started":"2021-07-17T15:12:12.24516Z","shell.execute_reply":"2021-07-17T15:12:12.716234Z"}}
 test_s = "מלצרית אמרה ל מנהל טבח הלך"
@@ -284,7 +292,8 @@ test_s_tokenized = tokenizer(test_s, truncation=True, padding=True)
 test_s_dataset = HebrewNERDataset(test_s_tokenized, [0 for i in range(len(test_s))])
 test_s_pred, _, _ = trainer.predict(test_s_dataset)
 test_s_pred = np.argmax(test_s_pred, axis=1)
-label_encoder.inverse_transform(test_s_pred)
+print(test_s)
+print(label_encoder.inverse_transform(test_s_pred))
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:06:08.610255Z","iopub.execute_input":"2021-07-17T15:06:08.610585Z","iopub.status.idle":"2021-07-17T15:06:34.197618Z","shell.execute_reply.started":"2021-07-17T15:06:08.610555Z","shell.execute_reply":"2021-07-17T15:06:34.196818Z"}}
 import shutil
