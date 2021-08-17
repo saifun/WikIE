@@ -103,12 +103,12 @@ label_encoder.fit(labels)
 label_encoder.inverse_transform([61])
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:58:48.883781Z","iopub.execute_input":"2021-07-19T11:58:48.884114Z","iopub.status.idle":"2021-07-19T11:58:51.389112Z","shell.execute_reply.started":"2021-07-19T11:58:48.884085Z","shell.execute_reply":"2021-07-19T11:58:51.388079Z"}}
-train_encodings = tokenizer(train["word"].to_list()[:20], truncation=True, padding=True)
-dev_encodings = tokenizer(dev["word"].to_list()[:10], truncation=True, padding=True)
-test_encodings = tokenizer(test["word"].to_list()[:10], truncation=True, padding=True)
-train_labels = label_encoder.transform(train["label"].to_list()[:20])
-dev_labels = label_encoder.transform(dev["label"].to_list()[:10])
-test_labels = label_encoder.transform(test["label"].to_list()[:10])
+train_encodings = tokenizer(train["word"].to_list(), truncation=True, padding=True)
+dev_encodings = tokenizer(dev["word"].to_list(), truncation=True, padding=True)
+test_encodings = tokenizer(test["word"].to_list(), truncation=True, padding=True)
+train_labels = label_encoder.transform(train["label"].to_list())
+dev_labels = label_encoder.transform(dev["label"].to_list())
+test_labels = label_encoder.transform(test["label"].to_list())
 print(dev_labels)
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:58:53.267437Z","iopub.execute_input":"2021-07-19T11:58:53.267789Z","iopub.status.idle":"2021-07-19T11:58:53.27407Z","shell.execute_reply.started":"2021-07-19T11:58:53.267759Z","shell.execute_reply":"2021-07-19T11:58:53.273004Z"}}
