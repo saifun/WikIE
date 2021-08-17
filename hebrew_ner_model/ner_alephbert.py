@@ -10,9 +10,9 @@ model.save_pretrained("./initial_pretrained")
 # %% [code]
 dataset = {
     "name": "NEMO Corpus",
-    "train_path": "./NEMO-Corpus/data/spmrl/gold/token-multi_gold_train.bmes",
-    "dev_path": "./NEMO-Corpus/data/spmrl/gold/token-multi_gold_dev.bmes",
-    "test_path": "./NEMO-Corpus/data/spmrl/gold/token-multi_gold_test.bmes",
+    "train_path": "~/code/NEMO-Corpus/data/spmrl/gold/token-multi_gold_train.bmes",
+    "dev_path": "~/code/NEMO-Corpus/data/spmrl/gold/token-multi_gold_dev.bmes",
+    "test_path": "~/code/NEMO-Corpus/data/spmrl/gold/token-multi_gold_test.bmes",
     'classes': []
 }
 
