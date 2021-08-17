@@ -198,7 +198,7 @@ count_equals = 0
 for a, b in zip(test_dataset.labels, y_pred):
     if a == b:
         count_equals += 1
-print(f"accuracy={count_equals / len(y_pred)}")
+print("accuracy=" + str(count_equals / len(y_pred)))
 
 
 def evaluate(y_test, predicted):
