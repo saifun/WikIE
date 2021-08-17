@@ -1,12 +1,8 @@
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:57:25.810663Z","iopub.execute_input":"2021-07-19T11:57:25.810975Z","iopub.status.idle":"2021-07-19T11:57:27.543509Z","shell.execute_reply.started":"2021-07-19T11:57:25.81093Z","shell.execute_reply":"2021-07-19T11:57:27.542483Z"}}
-!git
-clone
-https: // github.com / OnlpLab / NEMO - Corpus.git
+!git clone https: // github.com / OnlpLab / NEMO - Corpus.git
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:57:27.546097Z","iopub.execute_input":"2021-07-19T11:57:27.546493Z","iopub.status.idle":"2021-07-19T11:57:34.762317Z","shell.execute_reply.started":"2021-07-19T11:57:27.54645Z","shell.execute_reply":"2021-07-19T11:57:34.761288Z"}}
-!pip
-install
-transformers
+!pip install transformers
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:57:34.766318Z","iopub.execute_input":"2021-07-19T11:57:34.766653Z","iopub.status.idle":"2021-07-19T11:58:06.375629Z","shell.execute_reply.started":"2021-07-19T11:57:34.766618Z","shell.execute_reply":"2021-07-19T11:58:06.374627Z"}}
 from transformers import BertModel, BertTokenizerFast
@@ -30,13 +26,7 @@ dataset = {
 }
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:58:10.426892Z","iopub.execute_input":"2021-07-19T11:58:10.427232Z","iopub.status.idle":"2021-07-19T11:58:11.247522Z","shell.execute_reply.started":"2021-07-19T11:58:10.4272Z","shell.execute_reply":"2021-07-19T11:58:11.246431Z"}}
-!cat
-NEMO - Corpus / data / spmrl / gold / token - multi_gold_train.bmes
-NEMO - Corpus / data / spmrl / gold / token - multi_gold_dev.bmes
-NEMO - Corpus / data / spmrl / gold / token - multi_gold_test.bmes | cut - d
-" " - f
-2 | grep - v
-"^$" | sort | uniq > labels.txt
+!cat NEMO - Corpus / data / spmrl / gold / token - multi_gold_train.bmes NEMO - Corpus / data / spmrl / gold / token - multi_gold_dev.bmes NEMO - Corpus / data / spmrl / gold / token - multi_gold_test.bmes | cut - d " " - f 2 | grep - v "^$" | sort | uniq > labels.txt
 
 # %% [code]
 labels = []
@@ -46,8 +36,8 @@ with open('labels.txt', 'r') as file:
 labels.extend(["OCC", "O^OCC", "O^O^OCC", "O^O^O^OCC"])
 print(labels)
 dataset['classes'] = labels
-print(len(labels))
-print(labels[61])
+#print(len(labels))
+#print(labels[61])
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:58:17.782569Z","iopub.execute_input":"2021-07-19T11:58:17.78293Z","iopub.status.idle":"2021-07-19T11:58:18.090415Z","shell.execute_reply.started":"2021-07-19T11:58:17.782883Z","shell.execute_reply":"2021-07-19T11:58:18.089386Z"}}
 import pandas as pd
@@ -67,7 +57,7 @@ train, dev, test = read_data()
 # train.to_csv("train_example.csv")
 
 # %% [code]
-occupation_file_path = '../input/occupations/occupations.txt'
+occupation_file_path = './occupations.txt'
 occ_file = open(occupation_file_path, 'r')
 occupations_set = set([line.replace('\n', '') for line in occ_file.readlines() if line.replace('\n', '')])
 
@@ -125,12 +115,12 @@ label_encoder.fit(labels)
 label_encoder.inverse_transform([61])
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:58:48.883781Z","iopub.execute_input":"2021-07-19T11:58:48.884114Z","iopub.status.idle":"2021-07-19T11:58:51.389112Z","shell.execute_reply.started":"2021-07-19T11:58:48.884085Z","shell.execute_reply":"2021-07-19T11:58:51.388079Z"}}
-train_encodings = tokenizer(train["word"].to_list()[:60000], truncation=True, padding=True)
-dev_encodings = tokenizer(dev["word"].to_list(), truncation=True, padding=True)
-test_encodings = tokenizer(test["word"].to_list(), truncation=True, padding=True)
-train_labels = label_encoder.transform(train["label"].to_list()[:60000])
-dev_labels = label_encoder.transform(dev["label"].to_list())
-test_labels = label_encoder.transform(test["label"].to_list())
+train_encodings = tokenizer(train["word"].to_list()[:20], truncation=True, padding=True)
+dev_encodings = tokenizer(dev["word"].to_list()[:10], truncation=True, padding=True)
+test_encodings = tokenizer(test["word"].to_list()[:10], truncation=True, padding=True)
+train_labels = label_encoder.transform(train["label"].to_list()[:20])
+dev_labels = label_encoder.transform(dev["label"].to_list()[:10])
+test_labels = label_encoder.transform(test["label"].to_list()[:10])
 print(dev_labels)
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-19T11:58:53.267437Z","iopub.execute_input":"2021-07-19T11:58:53.267789Z","iopub.status.idle":"2021-07-19T11:58:53.27407Z","shell.execute_reply.started":"2021-07-19T11:58:53.267759Z","shell.execute_reply":"2021-07-19T11:58:53.273004Z"}}
@@ -314,7 +304,7 @@ label_encoder.inverse_transform(test_s_pred)
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:06:08.610255Z","iopub.execute_input":"2021-07-17T15:06:08.610585Z","iopub.status.idle":"2021-07-17T15:06:34.197618Z","shell.execute_reply.started":"2021-07-17T15:06:08.610555Z","shell.execute_reply":"2021-07-17T15:06:34.196818Z"}}
 import shutil
 
-shutil.make_archive('alephbert_ner_occ_morph', 'zip', '/kaggle/working/alephbert_ner')
+shutil.make_archive('alephbert_ner_occ_morph', 'zip', './alephbert_ner')
 
 # %% [code] {"execution":{"iopub.status.busy":"2021-07-17T15:06:46.900196Z","iopub.execute_input":"2021-07-17T15:06:46.900515Z","iopub.status.idle":"2021-07-17T15:06:46.907651Z","shell.execute_reply.started":"2021-07-17T15:06:46.900486Z","shell.execute_reply":"2021-07-17T15:06:46.90675Z"}}
 from IPython.display import FileLink
