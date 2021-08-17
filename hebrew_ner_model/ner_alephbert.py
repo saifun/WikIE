@@ -1,3 +1,4 @@
+#!/bin/python
 from transformers import BertModel, BertTokenizerFast
 
 tokenizer = BertTokenizerFast.from_pretrained('onlplab/alephbert-base')
