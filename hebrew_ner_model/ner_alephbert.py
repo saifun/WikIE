@@ -153,6 +153,7 @@ CUDA_LAUNCH_BLOCKING = 1
 from transformers import Trainer, TrainingArguments
 
 training_args = TrainingArguments(
+    report_to=None,
     output_dir='./results',  # output directory
     num_train_epochs=3,  # total number of training epochs
     per_device_train_batch_size=16,  # batch size per device during training
