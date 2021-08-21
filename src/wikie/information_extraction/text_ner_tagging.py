@@ -36,7 +36,8 @@ class NERModel:
         return self.label_encoder.inverse_transform(text_predictions)
 
 
-def get_ner_for_text(text, ner_model):
-    tokenized_text = ner_model.tokenizer(text.split(), truncation=True, padding=True)
-    text_dataset = HebrewNERDataset(tokenized_text, [0 for _ in range(len(tokenized_text))])
+def get_ner_for_text(parsed_text, ner_model):
+    text = parsed_text.tolist()
+    tokenized_text = ner_model.tokenizer(text, truncation=True, padding=True)
+    text_dataset = HebrewNERDataset(tokenized_text, [0 for _ in range(len(text))])
     return ner_model.predict(text_dataset)

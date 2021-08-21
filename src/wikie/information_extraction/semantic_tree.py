@@ -13,6 +13,7 @@ class SemanticTree:
     def get_extracted_information_for_text(self):
         self.parse_text()
         self.build_ner_for_text()
+        print(self.ner)
         self.cluster_text_by_ner()
         interesting_words_info = self.get_interesting_words_info()
         return self.build_info_dict(interesting_words_info)
@@ -48,7 +49,7 @@ class SemanticTree:
         return word
 
     def build_ner_for_text(self):
-        self.ner = get_ner_for_text(self.text, self.ner_model)
+        self.ner = get_ner_for_text(self.parsed_text, self.ner_model)
 
     def cluster_text_by_ner(self):
         text_with_ner = list(zip(self.parsed_text, self.ner))
