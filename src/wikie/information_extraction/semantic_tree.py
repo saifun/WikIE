@@ -13,9 +13,13 @@ class SemanticTree:
     def get_extracted_information_for_text(self):
         self.parse_text()
         self.build_ner_for_text()
+        # TODO: remove
         print(self.ner)
         self.cluster_text_by_ner()
+        print(self.clustered_text)
         interesting_words_info = self.get_interesting_words_info()
+        print(interesting_words_info)
+        print(self.build_info_dict(interesting_words_info))
         return self.build_info_dict(interesting_words_info)
 
     def parse_text(self):
@@ -56,7 +60,9 @@ class SemanticTree:
         self.clustered_text = []
         for text, ner in text_with_ner:
             ner = ner.split('^')[-1]
-            if ner.startswith(SINGLETON) or ner.startswith(BEGIN):
+            if ner in ner_translator:
+                self.clustered_text.append((text, ner))
+            elif ner.startswith(SINGLETON) or ner.startswith(BEGIN):
                 self.clustered_text.append((text, ner[2:]))
             elif ner.startswith(OUTSIDE):
                 self.clustered_text.append((text, OUTSIDE))
@@ -85,9 +91,10 @@ class SemanticTree:
         return interesting_roots
 
     def build_info_dict(self, interesting_words_info):
+        unusual_ner_tagging = ['שם', 'מקצוע']
         return {
             '{}{}'.format(word_info.ner_definition,
-                          ' - ' + word_info.root if word_info.ner_definition != 'שם' else ''): word_info.text
+                          ' - ' + word_info.root if word_info.ner_definition not in unusual_ner_tagging else ''): word_info.text
             for word_info in interesting_words_info
         }
 
