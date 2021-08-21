@@ -1,12 +1,21 @@
 from stanza_processor import Processor
 from date_recognition import enrich_ner_tags_with_dates
+from text_ner_tagging import get_ner_for_text
 from consts import Info, ROOT, SINGLETON, BEGIN, OUTSIDE, WordNerInfo, ner_translator
 
 
 class SemanticTree:
-    def __init__(self, text):
+    def __init__(self, text, ner_model):
         self.text = text
+        self.ner_model = ner_model
         self.processor = Processor()
+
+    def get_extracted_information_for_text(self):
+        self.parse_text()
+        self.build_ner_for_text()
+        self.cluster_text_by_ner()
+        interesting_words_info = self.get_interesting_words_info()
+        return self.build_info_dict(interesting_words_info)
 
     def parse_text(self):
         parsed_text, tree, pos = self.processor.get_stanza_analysis(self.text)
@@ -38,9 +47,8 @@ class SemanticTree:
             word = self.get_word_in_index(self.tree[word].head)
         return word
 
-    def build_ner_for_text(self, ner):
-        # TODO: complete with ner call
-        self.ner = ner
+    def build_ner_for_text(self):
+        self.ner = get_ner_for_text(self.text, self.ner_model)
 
     def cluster_text_by_ner(self):
         text_with_ner = list(zip(self.parsed_text, self.ner))

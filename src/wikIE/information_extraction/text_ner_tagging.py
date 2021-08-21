@@ -1,8 +1,10 @@
-from transformers import BertModel, BertTokenizerFast, BertForSequenceClassification, Trainer
-tokenizer = BertTokenizerFast.from_pretrained('onlplab/alephbert-base')
-import numpy as np
-
 import torch
+import numpy as np
+from sklearn import preprocessing
+from transformers import BertModel, BertTokenizerFast, BertForSequenceClassification, Trainer
+
+tokenizer = BertTokenizerFast.from_pretrained('onlplab/alephbert-base')
+
 
 class HebrewNERDataset(torch.utils.data.Dataset):
     def __init__(self, encodings, labels):
@@ -17,24 +19,25 @@ class HebrewNERDataset(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.labels)
 
-trainer = BertForSequenceClassification.from_pretrained('./alephbert_ner_occ_morph')
 
-trainer = Trainer(trainer)
+class NERModel:
+    def __init__(self):
+        trainer = BertForSequenceClassification.from_pretrained('../model_data/alephbert_ner_occ_morph')
+        self.trained_model = Trainer(trainer)
 
-labels = []
-with open('labels.txt', 'r') as file:
-    for line in file:
-        labels.append(line.strip())
+    def load_labels(self):
+        with open('labels.txt', 'r') as labels_file:
+            self.labels = list(map(lambda label: label.strip(), labels_file.readlines()))
+            self.label_encoder = preprocessing.LabelEncoder()
+            self.label_encoder.fit(self.labels)
 
-from sklearn import preprocessing
+    def predict(self, dataset):
+        text_prediction_probabilities, _, _ = self.trained_model.predict(dataset)
+        text_predictions = np.argmax(text_prediction_probabilities, axis=1)
+        return self.label_encoder.inverse_transform(text_predictions)
 
-label_encoder = preprocessing.LabelEncoder()
-label_encoder.fit(labels)
 
-test_s = "יוסי שטיינמץ הוא נגן קלרינט"
-test_s = test_s.split(" ")
-test_s_tokenized = tokenizer(test_s, truncation=True, padding=True)
-test_s_dataset = HebrewNERDataset(test_s_tokenized, [0 for i in range(len(test_s))])
-test_s_pred, _, _ = trainer.predict(test_s_dataset)
-test_s_pred = np.argmax(test_s_pred, axis=1)
-label_encoder.inverse_transform(test_s_pred)
+def get_ner_for_text(text, ner_model):
+    tokenized_text = tokenizer(text.split(), truncation=True, padding=True)
+    text_dataset = HebrewNERDataset(tokenized_text, [0 for _ in range(len(tokenized_text))])
+    return ner_model.predict(text_dataset)
