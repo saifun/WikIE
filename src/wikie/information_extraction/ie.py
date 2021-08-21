@@ -10,6 +10,4 @@ class IE:
     def extract_text_information(self, text):
         semantic_tree = SemanticTree(text, self.ner_model)
         interesting_words_info = semantic_tree.get_extracted_information_for_text()
-        for title, word in interesting_words_info.items():
-            print(title + ': ' + word)
         return interesting_words_info

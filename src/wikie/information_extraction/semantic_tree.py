@@ -14,13 +14,8 @@ class SemanticTree:
         self.parse_text()
         self.build_ner_for_text()
         self.add_date_tags()
-        # TODO: remove
-        print(self.ner)
         self.cluster_text_by_ner()
-        print(self.clustered_text)
         interesting_words_info = self.get_interesting_words_info()
-        print(interesting_words_info)
-        print(self.build_info_dict(interesting_words_info))
         return self.build_info_dict(interesting_words_info)
 
     def parse_text(self):
@@ -28,7 +23,6 @@ class SemanticTree:
         word_list = list(zip(list(parsed_text), map(lambda head: head - 1, list(tree)), list(pos)))
         self.tree = {word: Info(head, pos) for word, head, pos in word_list}
         self.parsed_text = parsed_text
-        print('PARSED_TEXT', self.parsed_text, type(self.parsed_text))
 
     def __str__(self):
         tree_rep = '{\n'

@@ -28,7 +28,6 @@ def is_date_related(word):
 def get_date_related_indices(first_index_to_check, last_index, split_text):
     date_related_range = []
     for index in range(last_index, first_index_to_check - 1, -1):
-        print(index, split_text[index], is_date_related(split_text[index]))
         if is_date_related(split_text[index]):
             date_related_range.append(index)
         else:
@@ -51,17 +50,11 @@ def get_year_indices(text):
 
 
 def enrich_ner_tags_with_dates(parsed_text, ner):
-    print('*********************************')
     text = ' '.join(parsed_text.tolist())
-    print(text)
     all_year_indices = get_year_indices(text)
-    print(all_year_indices)
     for year_index in all_year_indices:
         indices_to_tag_as_date = get_indices_to_tag(year_index, text)
-        print(indices_to_tag_as_date)
         if all([(ner[index].startswith('O') or ner[index] == DATE_TAG) for index in indices_to_tag_as_date]):
             for index in indices_to_tag_as_date:
                 ner[index] = DATE_TAG
-    print(ner)
-    print('*********************************')
     return ner
