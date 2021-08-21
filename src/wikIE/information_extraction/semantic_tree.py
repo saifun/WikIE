@@ -1,4 +1,5 @@
 from stanza_processor import Processor
+from date_recognition import enrich_ner_tags_with_dates
 from consts import Info, ROOT, SINGLETON, BEGIN, OUTSIDE, WordNerInfo, ner_translator
 
 
@@ -38,6 +39,7 @@ class SemanticTree:
         return word
 
     def build_ner_for_text(self, ner):
+        # TODO: complete with ner call
         self.ner = ner
 
     def cluster_text_by_ner(self):
@@ -83,4 +85,4 @@ class SemanticTree:
         }
 
     def add_date_tags(self):
-        pass
+        self.ner = enrich_ner_tags_with_dates(self.text, self.ner)
