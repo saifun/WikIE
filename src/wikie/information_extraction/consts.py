@@ -5,12 +5,10 @@ Semantic representation related consts
 """
 HEAD = 'head'
 POS = 'pos'
-Info = namedtuple('Info', [HEAD, POS])
+WORD = 'word'
+Info = namedtuple('Info', [WORD, HEAD, POS])
 WordNerInfo = namedtuple('WordNerInfo', ['text', 'ner_definition', 'root'])
 ROOT = -1
-SINGLETON = 'S-'
-BEGIN = 'B-'
-INSIDE = 'I-'
 OUTSIDE = 'O'
 END = 'E-'
 NER = 1

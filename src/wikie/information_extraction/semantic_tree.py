@@ -1,7 +1,7 @@
 from .stanza_processor import Processor
 from .date_recognition import enrich_ner_tags_with_dates
 from .text_ner_tagging import get_ner_for_text
-from .consts import Info, ROOT, SINGLETON, BEGIN, OUTSIDE, WordNerInfo, ner_translator, NER
+from .consts import Info, ROOT, OUTSIDE, WordNerInfo, ner_translator, NER
 
 
 class SemanticTree:
@@ -21,31 +21,31 @@ class SemanticTree:
     def parse_text(self):
         parsed_text, tree, pos = self.processor.get_stanza_analysis(self.text)
         word_list = list(zip(list(parsed_text), map(lambda head: head - 1, list(tree)), list(pos)))
-        self.tree = {word: Info(head, pos) for word, head, pos in word_list}
+        self.tree = {index: Info(word, head, pos) for index, (word, head, pos) in enumerate(word_list)}
         self.parsed_text = parsed_text
 
     def __str__(self):
         tree_rep = '{\n'
-        for word, info in self.tree.items():
-            tree_rep += '{}: {}\n'.format(word, info)
+        for index, info in self.tree.items():
+            tree_rep += '{}: {}\n'.format(index, info)
         tree_rep += '}\n'
         return tree_rep
 
-    def is_verb(self, word):
-        return self.tree[word].pos == 'VERB'
+    def is_verb(self, word_index):
+        return self.tree[word_index].pos == 'VERB'
 
-    def is_root(self, word):
-        return self.tree[word].head == ROOT
+    def is_root(self, word_index):
+        return self.tree[word_index].head == ROOT
 
     def get_word_in_index(self, index):
-        return list(self.tree.keys())[index]
+        return self.tree[index].word
 
-    def find_verb_root(self, word):
-        while (not self.is_root(word)):
-            if self.is_verb(word):
-                return word
-            word = self.get_word_in_index(self.tree[word].head)
-        return word
+    def find_verb_root(self, word_index):
+        while (not self.is_root(word_index)):
+            if self.is_verb(word_index):
+                return word_index
+            word_index = self.tree[word_index].head
+        return word_index
 
     def build_ner_for_text(self):
         self.ner = get_ner_for_text(self.parsed_text, self.ner_model)
@@ -60,18 +60,18 @@ class SemanticTree:
     def cluster_text_by_ner(self):
         text_with_ner = list(zip(self.parsed_text, self.ner))
         self.clustered_text = []
-        for text, ner in text_with_ner:
+        for index, (text, ner) in enumerate(text_with_ner):
             ner = self._get_bare_ner(ner)
             if self.clustered_text and self.clustered_text[-1][NER] == ner:
-                previous_text, previous_ner = self.clustered_text.pop()
+                previous_text, previous_ner, previous_index = self.clustered_text.pop()
                 united_text = '{} {}'.format(previous_text, text)
-                self.clustered_text.append((united_text, previous_ner))
+                self.clustered_text.append((united_text, previous_ner, previous_index))
             else:
-                self.clustered_text.append((text, ner))
+                self.clustered_text.append((text, ner, index))
 
     def _get_info_for_word_cluster(self, word_cluster):
-        text, ner = word_cluster
-        root = self.find_verb_root(text.split(' ')[0])
+        text, ner, index = word_cluster
+        root = self.get_word_in_index(self.find_verb_root(index))
         ner_definition = ner_translator[ner]
         return WordNerInfo(text, ner_definition, root)
 
@@ -84,7 +84,7 @@ class SemanticTree:
         We need to take into account also the POS of the word.
         """
         interesting_words = list(filter(lambda ner_word:
-                                        self._is_word_interesting(ner_word[1]), self.clustered_text))
+                                        self._is_word_interesting(ner_word[NER]), self.clustered_text))
         interesting_roots = [self._get_info_for_word_cluster(word) for word in interesting_words]
         return interesting_roots
 
