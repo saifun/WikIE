@@ -131,6 +131,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-/src/wikie/model_data/
-/src/wikie/information_extraction/model_data/
-/src/wikie/information_extraction/alephbert_ner_occ_morph/
+/src/wikie/model_data/alephbert_ner_occ_morph/
+/src/wikie/model_data/alephbert_ner_occ_morph.zip

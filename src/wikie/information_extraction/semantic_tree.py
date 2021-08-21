@@ -13,6 +13,7 @@ class SemanticTree:
     def get_extracted_information_for_text(self):
         self.parse_text()
         self.build_ner_for_text()
+        self.add_date_tags()
         # TODO: remove
         print(self.ner)
         self.cluster_text_by_ner()
