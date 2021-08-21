@@ -103,4 +103,4 @@ class SemanticTree:
         }
 
     def add_date_tags(self):
-        self.ner = enrich_ner_tags_with_dates(self.text, self.ner)
+        self.ner = enrich_ner_tags_with_dates(self.parsed_text, self.ner)

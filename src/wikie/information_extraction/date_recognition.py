@@ -50,12 +50,18 @@ def get_year_indices(text):
     return [span_to_index[result.span()] for result in matched_year]
 
 
-def enrich_ner_tags_with_dates(text, ner):
+def enrich_ner_tags_with_dates(parsed_text, ner):
+    print('*********************************')
+    text = ' '.join(parsed_text.tolist())
+    print(text)
     all_year_indices = get_year_indices(text)
+    print(all_year_indices)
     for year_index in all_year_indices:
         indices_to_tag_as_date = get_indices_to_tag(year_index, text)
+        print(indices_to_tag_as_date)
         if all([(ner[index].startswith('O') or ner[index] == DATE_TAG) for index in indices_to_tag_as_date]):
             for index in indices_to_tag_as_date:
                 ner[index] = DATE_TAG
     print(ner)
+    print('*********************************')
     return ner
