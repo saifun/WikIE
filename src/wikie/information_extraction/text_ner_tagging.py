@@ -3,8 +3,6 @@ import numpy as np
 from sklearn import preprocessing
 from transformers import BertModel, BertTokenizerFast, BertForSequenceClassification, Trainer
 
-tokenizer = BertTokenizerFast.from_pretrained('onlplab/alephbert-base')
-
 
 class HebrewNERDataset(torch.utils.data.Dataset):
     def __init__(self, encodings, labels):
@@ -22,11 +20,12 @@ class HebrewNERDataset(torch.utils.data.Dataset):
 
 class NERModel:
     def __init__(self):
-        trainer = BertForSequenceClassification.from_pretrained('../model_data/alephbert_ner_occ_morph')
+        trainer = BertForSequenceClassification.from_pretrained('wikie/model_data/alephbert_ner_occ_morph')
         self.trained_model = Trainer(trainer)
+        self.tokenizer = BertTokenizerFast.from_pretrained('onlplab/alephbert-base')
 
     def load_labels(self):
-        with open('labels.txt', 'r') as labels_file:
+        with open('wikie/information_extraction/labels.txt', 'r') as labels_file:
             self.labels = list(map(lambda label: label.strip(), labels_file.readlines()))
             self.label_encoder = preprocessing.LabelEncoder()
             self.label_encoder.fit(self.labels)
@@ -38,6 +37,6 @@ class NERModel:
 
 
 def get_ner_for_text(text, ner_model):
-    tokenized_text = tokenizer(text.split(), truncation=True, padding=True)
+    tokenized_text = ner_model.tokenizer(text.split(), truncation=True, padding=True)
     text_dataset = HebrewNERDataset(tokenized_text, [0 for _ in range(len(tokenized_text))])
     return ner_model.predict(text_dataset)

@@ -1,7 +1,7 @@
-from stanza_processor import Processor
-from date_recognition import enrich_ner_tags_with_dates
-from text_ner_tagging import get_ner_for_text
-from consts import Info, ROOT, SINGLETON, BEGIN, OUTSIDE, WordNerInfo, ner_translator
+from .stanza_processor import Processor
+from .date_recognition import enrich_ner_tags_with_dates
+from .text_ner_tagging import get_ner_for_text
+from .consts import Info, ROOT, SINGLETON, BEGIN, OUTSIDE, WordNerInfo, ner_translator
 
 
 class SemanticTree:

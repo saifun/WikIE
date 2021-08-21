@@ -1,10 +1,11 @@
-from semantic_tree import SemanticTree
-from text_ner_tagging import NERModel
+from .semantic_tree import SemanticTree
+from .text_ner_tagging import NERModel
 
 
 class IE:
     def __init__(self):
         self.ner_model = NERModel()
+        self.ner_model.load_labels()
 
     def extract_text_information(self, text):
         semantic_tree = SemanticTree(text, self.ner_model)

@@ -1,6 +1,6 @@
 import re as regex
 import string
-from consts import DATE_TAG, date_related_words, year_regex, hebrew_day_regex, DATE_TEXT_MAX_GAP
+from .consts import DATE_TAG, date_related_words, year_regex, hebrew_day_regex, DATE_TEXT_MAX_GAP
 
 
 def build_span_to_index_dict(text):
