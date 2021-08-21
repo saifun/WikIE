@@ -1,6 +1,7 @@
 from semantic_tree import SemanticTree
 from text_ner_tagging import NERModel
 
+
 class IE:
     def __init__(self):
         self.ner_model = NERModel()

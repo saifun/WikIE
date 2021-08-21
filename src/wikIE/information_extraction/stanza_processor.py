@@ -1,10 +1,10 @@
 import stanza
+import pandas as pd
+
 
 class Processor:
     def __init__(self):
         self.heb_nlp = stanza.Pipeline(lang='he', processors='tokenize,mwt,pos,lemma,depparse')
-        # replace MY_TOKEN with the token you got from the langndata website
-        self.yap_token = "21e79c010599d991fd815b93048b245b"
 
     def get_stanza_analysis(self, text):
         text += " XX"

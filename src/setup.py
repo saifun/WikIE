@@ -5,6 +5,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         'stanza',
-        'pandas'
+        'pandas==1.2.3',
+        'torch==1.8.1',
+        'numpy==1.20.1',
+        'sklearn',
+        'transformers==4.6.1'
     ]
 )

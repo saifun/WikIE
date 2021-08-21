@@ -67,8 +67,6 @@ class SemanticTree:
     def _get_info_for_word_cluster(self, word_cluster):
         text, ner = word_cluster
         root = self.find_verb_root(text.split(' ')[0])
-        #         if self.is_verb(root):
-        #             root = get_verb_name_for_verb(root)
         ner_definition = ner_translator[ner]
         return WordNerInfo(text, ner_definition, root)
 
