@@ -13,6 +13,7 @@ BEGIN = 'B-'
 INSIDE = 'I-'
 OUTSIDE = 'O'
 END = 'E-'
+NER = 1
 ner_translator = {
     'GPE': 'מדינה',
     'PER': 'שם',

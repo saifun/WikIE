@@ -1,7 +1,7 @@
 from .stanza_processor import Processor
 from .date_recognition import enrich_ner_tags_with_dates
 from .text_ner_tagging import get_ner_for_text
-from .consts import Info, ROOT, SINGLETON, BEGIN, OUTSIDE, WordNerInfo, ner_translator
+from .consts import Info, ROOT, SINGLETON, BEGIN, OUTSIDE, WordNerInfo, ner_translator, NER
 
 
 class SemanticTree:
@@ -55,21 +55,24 @@ class SemanticTree:
     def build_ner_for_text(self):
         self.ner = get_ner_for_text(self.parsed_text, self.ner_model)
 
+    @staticmethod
+    def _get_bare_ner(ner):
+        """
+        Peels all ner prefixes and returns the core ner.
+        """
+        return ner.split('^')[-1].split('-')[-1]
+
     def cluster_text_by_ner(self):
         text_with_ner = list(zip(self.parsed_text, self.ner))
         self.clustered_text = []
         for text, ner in text_with_ner:
-            ner = ner.split('^')[-1]
-            if ner in ner_translator:
-                self.clustered_text.append((text, ner))
-            elif ner.startswith(SINGLETON) or ner.startswith(BEGIN):
-                self.clustered_text.append((text, ner[2:]))
-            elif ner.startswith(OUTSIDE):
-                self.clustered_text.append((text, OUTSIDE))
-            else:  # INSIDE or END
+            ner = self._get_bare_ner(ner)
+            if self.clustered_text and self.clustered_text[-1][NER] == ner:
                 previous_text, previous_ner = self.clustered_text.pop()
                 united_text = '{} {}'.format(previous_text, text)
                 self.clustered_text.append((united_text, previous_ner))
+            else:
+                self.clustered_text.append((text, ner))
 
     def _get_info_for_word_cluster(self, word_cluster):
         text, ner = word_cluster
