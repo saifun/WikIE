@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from .stanza_processor import Processor
 from .date_recognition import enrich_ner_tags_with_dates
 from .text_ner_tagging import get_ner_for_text
@@ -16,7 +18,8 @@ class SemanticTree:
         self.add_date_tags()
         self.cluster_text_by_ner()
         interesting_words_info = self.get_interesting_words_info()
-        return self.build_info_dict(interesting_words_info)
+        organized_info = self.build_info_representation(interesting_words_info)
+        return organized_info
 
     def parse_text(self):
         parsed_text, tree, pos = self.processor.get_stanza_analysis(self.text)
@@ -88,13 +91,14 @@ class SemanticTree:
         interesting_roots = [self._get_info_for_word_cluster(word) for word in interesting_words]
         return interesting_roots
 
-    def build_info_dict(self, interesting_words_info):
+    def build_info_representation(self, interesting_words_info):
         unusual_ner_tagging = ['שם', 'מקצוע']
-        return {
-            '{}{}'.format(word_info.ner_definition,
-                          ' - ' + word_info.root if word_info.ner_definition not in unusual_ner_tagging else ''): word_info.text
-            for word_info in interesting_words_info
-        }
+        info = defaultdict(set)
+        for word_info in interesting_words_info:
+            info_to_present = word_info.text if word_info.ner_definition in unusual_ner_tagging else (
+                word_info.text, word_info.root)
+            info[word_info.ner_definition].add(info_to_present)
+        return dict(info)
 
     def add_date_tags(self):
         self.ner = enrich_ner_tags_with_dates(self.parsed_text, self.ner)
