@@ -3,7 +3,7 @@ from collections import defaultdict
 from .stanza_processor import Processor
 from .date_recognition import enrich_ner_tags_with_dates
 from .text_ner_tagging import get_ner_for_text
-from .consts import Info, ROOT, OUTSIDE, WordNerInfo, ner_translator, NER
+from .consts import Info, ROOT, OUTSIDE, WordNerInfo, ner_translator, NER, punctuation
 
 
 class SemanticTree:
@@ -65,7 +65,7 @@ class SemanticTree:
         self.clustered_text = []
         for index, (text, ner) in enumerate(text_with_ner):
             ner = self._get_bare_ner(ner)
-            if self.clustered_text and self.clustered_text[-1][NER] == ner:
+            if text not in punctuation and self.clustered_text and self.clustered_text[-1][NER] == ner:
                 previous_text, previous_ner, previous_index = self.clustered_text.pop()
                 united_text = '{} {}'.format(previous_text, text)
                 self.clustered_text.append((united_text, previous_ner, previous_index))
@@ -75,7 +75,7 @@ class SemanticTree:
     def _get_info_for_word_cluster(self, word_cluster):
         text, ner, index = word_cluster
         root = self.get_word_in_index(self.find_verb_root(index))
-        ner_definition = ner_translator[ner]
+        ner_definition = ner_translator(ner)
         return WordNerInfo(text, ner_definition, root)
 
     def _is_word_interesting(self, ner):

@@ -1,6 +1,6 @@
-import re as regex
 import string
-from .consts import DATE_TAG, date_related_words, year_regex, hebrew_day_regex, DATE_TEXT_MAX_GAP
+import re as regex
+from .consts import DATE_TAG, date_related_words, year_regex, hebrew_day_regex, DATE_TEXT_MAX_GAP, punctuation
 
 
 def build_span_to_index_dict(text):
@@ -18,11 +18,13 @@ def does_contain_digits(word):
 
 
 def is_date_related(word):
-    return len(word) == 1 \
-           or word in date_related_words \
-           or does_contain_digits(word) \
-           or regex.match(year_regex, word) \
-           or regex.match(hebrew_day_regex, word)
+    return word not in punctuation \
+           and (len(word) == 1
+                or word in date_related_words
+                or word[1:] in date_related_words
+                or does_contain_digits(word)
+                or regex.match(year_regex, word)
+                or regex.match(hebrew_day_regex, word))
 
 
 def get_date_related_indices(first_index_to_check, last_index, split_text):
@@ -35,9 +37,9 @@ def get_date_related_indices(first_index_to_check, last_index, split_text):
     return sorted(date_related_range)
 
 
-def get_indices_to_tag(index, text):
+def get_indices_to_tag(index, text, prev_year_index):
     split_text = text.split()
-    first_index_to_check = max(index - DATE_TEXT_MAX_GAP, 0)
+    first_index_to_check = max(index - DATE_TEXT_MAX_GAP, 0, prev_year_index + 1)
     return get_date_related_indices(first_index_to_check, index, split_text)
 
 
@@ -52,9 +54,13 @@ def get_year_indices(text):
 def enrich_ner_tags_with_dates(parsed_text, ner):
     text = ' '.join(parsed_text.tolist())
     all_year_indices = get_year_indices(text)
+    prev_year_index = -1
+    date_pattern_index = 0
     for year_index in all_year_indices:
-        indices_to_tag_as_date = get_indices_to_tag(year_index, text)
-        if all([(ner[index].startswith('O') or ner[index] == DATE_TAG) for index in indices_to_tag_as_date]):
+        indices_to_tag_as_date = get_indices_to_tag(year_index, text, prev_year_index)
+        if all([(ner[index].startswith('O') or ner[index].startswith(DATE_TAG)) for index in indices_to_tag_as_date]):
             for index in indices_to_tag_as_date:
-                ner[index] = DATE_TAG
+                ner[index] = '{}_{}'.format(DATE_TAG, date_pattern_index)
+        prev_year_index = year_index
+        date_pattern_index += 1
     return ner

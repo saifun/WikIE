@@ -1,3 +1,4 @@
+import string
 from collections import namedtuple
 
 """
@@ -12,8 +13,11 @@ ROOT = -1
 OUTSIDE = 'O'
 END = 'E-'
 NER = 1
-ner_translator = {
-    'GPE': 'מדינה',
+
+punctuation = string.punctuation + chr(8211)
+
+ner_translation = {
+    'GPE': 'מקום',
     'PER': 'שם',
     'ORG': 'ארגון',
     'LOC': 'מיקום',
@@ -25,6 +29,13 @@ ner_translator = {
     'OCC': 'מקצוע',
     'DATE': 'תאריך'
 }
+
+
+def ner_translator(ner):
+    if ner.startswith(DATE_TAG):
+        return 'תאריך'
+    return ner_translation.get(ner)
+
 
 """
 Date extraction related consts
