@@ -1,6 +1,7 @@
 import string
 import re as regex
-from .consts import DATE_TAG, date_related_words, year_regex, hebrew_day_regex, DATE_TEXT_MAX_GAP, punctuation
+from .consts import DATE_TAG, date_related_words, year_regex, hebrew_day_regex, DATE_TEXT_MAX_GAP, punctuation, \
+    HEBREW_DASH, BIRTH_DATE_TAG, DEATH_DATE_TAG
 
 
 def build_span_to_index_dict(text):
@@ -48,7 +49,37 @@ def get_year_indices(text):
     span_to_index = build_span_to_index_dict(text)
     year_regex_compiled = regex.compile(year_regex)
     matched_year = year_regex_compiled.finditer(text)
-    return [span_to_index[result.span()] for result in matched_year]
+    all_year_indices = [(span_to_index[result.span()], result.start()) for result in matched_year]
+    return all_year_indices
+
+
+def get_all_occurrences(character, text):
+    return list(map(lambda span: span.start(), regex.finditer(character, text)))
+
+
+def get_date_related_punctuation(text):
+    left_parentheses_indices = get_all_occurrences(r'\(', text)
+    right_parentheses_indices = get_all_occurrences(r'\)', text)
+    dash_indices = get_all_occurrences(HEBREW_DASH, text) + get_all_occurrences('-', text)
+    return left_parentheses_indices, right_parentheses_indices, dash_indices
+
+
+def does_punctuation_exist_within_side(year_index, punctuation_indices, before=True):
+    return any(
+        filter(lambda punctuation_index: punctuation_index < year_index if before else punctuation_index > year_index,
+               punctuation_indices))
+
+
+def get_date_type(year_index, left_parentheses_indices, right_parentheses_indices, dash_indices):
+    opening_parentheses_before = does_punctuation_exist_within_side(year_index, left_parentheses_indices)
+    closing_parentheses_after = does_punctuation_exist_within_side(year_index, right_parentheses_indices, before=False)
+    dash_before = does_punctuation_exist_within_side(year_index, dash_indices)
+    dash_after = does_punctuation_exist_within_side(year_index, dash_indices, before=False)
+    if opening_parentheses_before and closing_parentheses_after and dash_after:
+        return BIRTH_DATE_TAG
+    if opening_parentheses_before and closing_parentheses_after and dash_before:
+        return DEATH_DATE_TAG
+    return DATE_TAG
 
 
 def enrich_ner_tags_with_dates(parsed_text, ner):
@@ -56,11 +87,16 @@ def enrich_ner_tags_with_dates(parsed_text, ner):
     all_year_indices = get_year_indices(text)
     prev_year_index = -1
     date_pattern_index = 0
-    for year_index in all_year_indices:
+    left_parentheses_indices, right_parentheses_indices, dash_indices = get_date_related_punctuation(text)
+    for year_index, char_year_index in all_year_indices:
         indices_to_tag_as_date = get_indices_to_tag(year_index, text, prev_year_index)
-        if all([(ner[index].startswith('O') or ner[index].startswith(DATE_TAG)) for index in indices_to_tag_as_date]):
+        if all([ner[index].startswith('O') for index in indices_to_tag_as_date]):
             for index in indices_to_tag_as_date:
-                ner[index] = '{}_{}'.format(DATE_TAG, date_pattern_index)
+                date_type_tag = get_date_type(char_year_index,
+                                              left_parentheses_indices,
+                                              right_parentheses_indices,
+                                              dash_indices)
+                ner[index] = '{}_{}'.format(date_type_tag, date_pattern_index)
         prev_year_index = year_index
         date_pattern_index += 1
     return ner

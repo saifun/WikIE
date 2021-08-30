@@ -3,7 +3,7 @@ from collections import defaultdict
 from .stanza_processor import Processor
 from .date_recognition import enrich_ner_tags_with_dates
 from .text_ner_tagging import get_ner_for_text
-from .consts import Info, ROOT, OUTSIDE, WordNerInfo, ner_translator, NER, punctuation
+from .consts import Info, ROOT, OUTSIDE, WordNerInfo, ner_translator, NER, punctuation, is_unusual_tag
 
 
 class SemanticTree:
@@ -92,10 +92,9 @@ class SemanticTree:
         return interesting_roots
 
     def build_info_representation(self, interesting_words_info):
-        unusual_ner_tagging = ['שם', 'מקצוע']
         info = defaultdict(set)
         for word_info in interesting_words_info:
-            info_to_present = word_info.text if word_info.ner_definition in unusual_ner_tagging else (
+            info_to_present = word_info.text if is_unusual_tag(word_info.ner_definition) else (
                 word_info.text, word_info.root)
             info[word_info.ner_definition].add(info_to_present)
         return dict(info)
