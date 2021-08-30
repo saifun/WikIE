@@ -22,7 +22,7 @@ class IE:
         return dict(reduce(self.merge_dicts, dicts_list))
 
     def extract_text_information(self, text):
-        sentences = list(filter(lambda sentence: sentence, text.split('.')))
+        sentences = list(filter(lambda sentence: sentence.strip(), text.split('.')))
         semantic_trees = [SemanticTree(sentence, self.ner_model) for sentence in sentences]
         interesting_words_info = self.merge_multiple_dicts(
             [semantic_tree.get_extracted_information_for_text() for semantic_tree in semantic_trees])
