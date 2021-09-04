@@ -84,10 +84,6 @@ class SemanticTree:
         return ner != OUTSIDE
 
     def get_interesting_words_info(self):
-        """
-        In the future - think what happens when there is more than one name (אלברט דיבר עם ניקו).
-        We need to take into account also the POS of the word.
-        """
         interesting_words = list(filter(lambda ner_word:
                                         self._is_word_interesting(ner_word[NER]), self.clustered_text))
         interesting_roots = [self._get_info_for_word_cluster(word) for word in interesting_words]
