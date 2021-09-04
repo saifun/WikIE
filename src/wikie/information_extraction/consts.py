@@ -22,6 +22,7 @@ Date extraction related consts
 DATE_TAG = 'DATE'
 BIRTH_DATE_TAG = DATE_TAG + '_BIRTH'
 DEATH_DATE_TAG = DATE_TAG + '_DEATH'
+NUMBER_TAG = 'NUM'
 
 DATE_TEXT_MAX_GAP = 5
 date_related_words = ['ינואר', 'פברואר', 'מרץ', 'מרס', 'מארס', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט',
@@ -52,7 +53,8 @@ ner_translation = {
     'FAC': 'מתקן',
     'WOA': 'יצירת אומנות',
     'OCC': OCCUPATION,
-    'DATE': 'תאריך'
+    'DATE': 'תאריך',
+    NUMBER_TAG: 'מספר'
 }
 
 

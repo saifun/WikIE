@@ -23,14 +23,15 @@ def does_contain_digits(word):
 
 
 def is_date_related(word):
-    return word not in punctuation \
-           and (len(word) == 1
-                or word in date_related_words
-                or word[1:] in date_related_words
-                or does_contain_digits(word)
-                or regex.match(year_regex, word)
-                or regex.match(hebrew_day_regex, word)
-                or regex.match(hebrew_day_regex, word[1:]))
+    clean_word = word.strip(string.punctuation)
+    return clean_word not in punctuation \
+           and (len(clean_word) == 1
+                or clean_word in date_related_words
+                or clean_word[1:] in date_related_words
+                or does_contain_digits(clean_word)
+                or regex.match(year_regex, clean_word)
+                or regex.match(hebrew_day_regex, clean_word)
+                or regex.match(hebrew_day_regex, clean_word[1:]))
 
 
 def get_date_related_indices(first_index_to_check, last_index, split_text):

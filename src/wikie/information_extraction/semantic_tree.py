@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from .stanza_processor import Processor
 from .date_recognition import enrich_ner_tags_with_dates
+from .number_recognition import enrich_ner_tags_with_numbers
 from .text_ner_tagging import get_ner_for_text
 from .consts import Info, ROOT, OUTSIDE, WordNerInfo, ner_translator, NER, punctuation, is_unusual_tag
 
@@ -16,6 +17,7 @@ class SemanticTree:
         self.parse_text()
         self.build_ner_for_text()
         self.add_date_tags()
+        self.add_number_tags()
         self.cluster_text_by_ner()
         interesting_words_info = self.get_interesting_words_info()
         organized_info = self.build_info_representation(interesting_words_info)
@@ -101,3 +103,6 @@ class SemanticTree:
 
     def add_date_tags(self):
         self.ner = enrich_ner_tags_with_dates(self.parsed_text, self.ner)
+
+    def add_number_tags(self):
+        self.ner = enrich_ner_tags_with_numbers(self.parsed_text, self.ner)
