@@ -45,7 +45,7 @@ OCCUPATION = 'מקצוע'
 ner_translation = {
     'GPE': 'מקום',
     'PER': NAME,
-    'ORG': 'ארגון',
+    'ORG': 'ארגון, עיר',
     'LOC': 'מיקום',
     'DUC': 'מוצר',
     'EVE': 'אירוע',
