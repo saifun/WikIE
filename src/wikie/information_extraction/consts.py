@@ -30,9 +30,10 @@ date_related_words = ['ינואר', 'פברואר', 'מרץ', 'מרס', 'מאר�
                       'אלול', 'פנה"ס', 'לפנה"ס']
 BCE_regex = r'[\u05E4][\u05E0][\u05D4][״"][\u05E1]\b'
 numeric_year_regex = r'[0-9]{4}\b'
-hebrew_year_regex = r'\u05D4?[׳\']?[\u05E7-\u05EA]{2}[\u05D9-\u05E6][״"][\u05D0-\u05D8]\b'
-year_regex = f'({numeric_year_regex}|{hebrew_year_regex}|{BCE_regex})'
-hebrew_day_regex = r'([\u05D0-\u05D8][\'׳]|[\u05D9-\u05E1]["״][\u05D0-\u05D8]\b)'
+hebrew_decade_year_regex = r'\u05D4?[׳\'\']?[\u05E7-\u05EA]{2}[״"][\u05D9-\u05E6]\b'
+hebrew_year_regex = r'\u05D4?[׳\'\']?[\u05E7-\u05EA]{2}[\u05D9-\u05E6]?[״"][\u05D0-\u05D8]\b'
+year_regex = f'({numeric_year_regex}|{hebrew_year_regex}|{hebrew_decade_year_regex}|{BCE_regex})'
+hebrew_day_regex = r'([\u05D0-\u05D8][\'\'׳]|[\u05D9-\u05E1]["״][\u05D0-\u05D8]\b)'
 
 """
 Tags related consts
