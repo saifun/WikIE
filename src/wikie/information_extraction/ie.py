@@ -10,7 +10,8 @@ class IE:
         self.ner_model = NERModel()
         self.ner_model.load_labels()
 
-    def merge_dicts(self, dict_a, dict_b):
+    @staticmethod
+    def merge_dicts(dict_a, dict_b):
         if dict_a is None:
             dict_a = {}
         default_first_dict = defaultdict(set, dict_a)
@@ -18,8 +19,9 @@ class IE:
             default_first_dict[key].update(value)
         return default_first_dict
 
-    def merge_multiple_dicts(self, dicts_list):
-        return dict(reduce(self.merge_dicts, dicts_list))
+    @staticmethod
+    def merge_multiple_dicts(dicts_list):
+        return dict(reduce(IE.merge_dicts, dicts_list))
 
     def extract_text_information(self, text):
         sentences = list(filter(lambda sentence: sentence.strip(), text.split('.')))
