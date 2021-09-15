@@ -5,6 +5,8 @@ A repo for the final project in Hebrew NLP - extracting information from biograp
 * Before you run the code, download [this](https://drive.google.com/file/d/1MeP9ea7uq22vuMEUTUR4JS9ZB-5-Xqnd/view?usp=sharing) zip file and extract it inside the folder `model_data`.
 * Install the package locally - `pip install -e src`
 
+When running the code, make sure you are inside `src` directory.
+
 Code example for using inline text:
 ```
 import wikie
